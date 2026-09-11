@@ -2,30 +2,16 @@ use trpl::{Either, Html};
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
-    let urls = &args[1..];
-
-    if urls.is_empty() || urls.len() > 3 {
-        eprintln!("Usage: {} <url1> [url2] [url3]", args[0]);
-        std::process::exit(1);
-    }
 
     trpl::block_on(async {
-        let (url, maybe_title) = match urls {
-            [a] => page_title(a).await,
-            [a, b] => match trpl::select(page_title(a), page_title(b)).await {
-                Either::Left(result) => result,
-                Either::Right(result) => result,
-            },
-            [a, b, c] => {
-                let first_two = trpl::select(page_title(a), page_title(b));
-                match trpl::select(first_two, page_title(c)).await {
-                    Either::Left(Either::Left(result)) => result,
-                    Either::Left(Either::Right(result)) => result,
-                    Either::Right(result) => result,
-                }
-            }
-            _ => unreachable!(),
-        };
+        let title_fut_1 = page_title(&args[1]);
+        let title_fut_2 = page_title(&args[2]);
+
+        let (url, maybe_title) =
+            match trpl::select(title_fut_1, title_fut_2).await {
+                Either::Left(left) => left,
+                Either::Right(right) => right,
+            };
 
         println!("{url} returned first");
         match maybe_title {
