@@ -3,7 +3,7 @@ name: run-hello-async
 description: Build and test the hello-async concurrent URL fetcher
 ---
 
-This is a Rust CLI application that fetches 1-3 URLs concurrently and returns the first one to complete, extracting its page title. The app demonstrates async/await patterns using the Tokio runtime.
+This is a Rust CLI application that fetches 1-4 URLs concurrently and returns the first one to complete, extracting its page title. The app demonstrates async/await patterns using the Tokio runtime.
 
 ## Prerequisites
 
@@ -32,8 +32,9 @@ node ./.claude/skills/run-hello-async/driver.mjs
 This builds the project, then runs the following test cases:
 - **Single URL**: `./target/debug/hello-async https://example.com`
 - **Two URLs** (race): `./target/debug/hello-async https://example.com https://www.rust-lang.org`
+- **Four URLs** (race): `./target/debug/hello-async https://example.com https://www.rust-lang.org https://github.com https://doc.rust-lang.org`
 - **No URLs** (error validation): returns usage message
-- **Too many URLs** (error validation): returns usage message
+- **Too many URLs** (error validation with 5 args): returns usage message
 
 The driver exits with code 0 if all tests pass, 1 otherwise.
 
@@ -42,7 +43,7 @@ The driver exits with code 0 if all tests pass, 1 otherwise.
 Execute the binary directly:
 
 ```bash
-./target/debug/hello-async <url1> [url2] [url3]
+./target/debug/hello-async <url1> [url2] [url3] [url4]
 ```
 
 Examples:
@@ -50,6 +51,7 @@ Examples:
 ./target/debug/hello-async https://example.com
 ./target/debug/hello-async https://example.com https://www.rust-lang.org
 ./target/debug/hello-async https://example.com https://www.rust-lang.org https://github.com
+./target/debug/hello-async https://example.com https://www.rust-lang.org https://github.com https://doc.rust-lang.org
 ```
 
 **Output**: Prints which URL returned first and its page title (if available).

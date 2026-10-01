@@ -73,13 +73,18 @@ const tests = [
     success: true,
   },
   {
+    name: 'Four URLs (race)',
+    args: ['https://example.com', 'https://www.rust-lang.org', 'https://github.com', 'https://doc.rust-lang.org'],
+    success: true,
+  },
+  {
     name: 'No URLs (error case)',
     args: [],
     success: false,
   },
   {
     name: 'Too many URLs (error case)',
-    args: ['url1', 'url2', 'url3', 'url4'],
+    args: ['url1', 'url2', 'url3', 'url4', 'url5'],
     success: false,
   },
 ];

@@ -4,8 +4,8 @@ fn main() {
     let args: Vec<String> = std::env::args().collect();
     let urls = &args[1..];
 
-    if urls.is_empty() || urls.len() > 3 {
-        eprintln!("Usage: {} <url1> [url2] [url3]", args[0]);
+    if urls.is_empty() || urls.len() > 4 {
+        eprintln!("Usage: {} <url1> [url2] [url3] [url4]", args[0]);
         std::process::exit(1);
     }
 
@@ -22,6 +22,16 @@ fn main() {
                     Either::Left(Either::Left(result)) => result,
                     Either::Left(Either::Right(result)) => result,
                     Either::Right(result) => result,
+                }
+            }
+            [a, b, c, d] => {
+                let first_two = trpl::select(page_title(a), page_title(b));
+                let last_two = trpl::select(page_title(c), page_title(d));
+                match trpl::select(first_two, last_two).await {
+                    Either::Left(Either::Left(result)) => result,
+                    Either::Left(Either::Right(result)) => result,
+                    Either::Right(Either::Left(result)) => result,
+                    Either::Right(Either::Right(result)) => result,
                 }
             }
             _ => unreachable!(),
